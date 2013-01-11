@@ -32,19 +32,19 @@ class NamespaceRelations {
 		if ( !empty( $wgNamespaceRelations ) ) {
 			$sortingWeight = self::STARTING_WEIGHT;
 			foreach ( $wgNamespaceRelations as $key => $data ) {
-				$this->_namespaces[$key] = array(
-					'message' => 'nstab-extra-' . $key,
-					'namespace' => $data['namespace'],
-					'target' => $data['target'],
+				$this->setNamespace( $key, null, array(
+					'message'    => 'nstab-extra-' . $key,
+					'namespace'  => $data['namespace'],
+					'target'     => $data['target'],
 					'inMainPage' => isset( $data['inMainPage'] ) ? $data['inMainPage'] : false,
-					'query' => isset( $data['query'] ) ? $data['query'] : null,
-					'hideTalk' => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
-				);
+					'query'      => isset( $data['query'] ) ? $data['query'] : '',
+					'hideTalk'   => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
+				) );
 				if ( !isset( $data['weight'] ) ) {
-					$this->_namespaces[$key]['weight'] = $sortingWeight;
+					$this->setNamespace( $key, 'weight', $sortingWeight );
 					$sortingWeight += self::WEIGHT_INCREMENT;
 				} else {
-					$this->_namespaces[$key]['weight'] = $data['weight'];
+					$this->setNamespace( $key, 'weight', $data['weight'] );
 				}
 
 				$this->addToNamespace( $data['namespace'], $key );
@@ -59,54 +59,45 @@ class NamespaceRelations {
 	 */
 	public function injectTabs( $skinTemplate, $navigation ) {
 		$title = $skinTemplate->getRelevantTitle();
+		$titleText = $title->getText();
 		$subjectNS = $title->getSubjectPage()->getNamespace();
 		$userCanRead = $title->quickUserCan( 'read', $skinTemplate->getUser() );
 
-		if ( array_key_exists( $subjectNS, $this->_namespacesToNamespace ) ) {
+		if ( array_key_exists( $subjectNS, $this->_namespacesToNamespace ) ) { // in Main/Talk NS
+			// set weights for Subject and Talk
+			list( $subjectId, $talkId ) = $this->getDefaultTabsIDs( $title );
+			$navigation[$subjectId]['weight'] = self::MAIN_WEIGHT;
+			$navigation[$talkId]['weight'] = self::TALK_WEIGHT;
+
 			foreach ( $this->_namespacesToNamespace[$subjectNS] as $key ) {
-				if ( $title->isMainPage() && !$this->getNamespace( $key, 'inMainPage' ) ) {
+				if ( $title->getSubjectPage()->isMainPage() && !$this->getNamespace( $key, 'inMainPage' ) ) {
 					continue;
 				}
-				$tabTitle = Title::makeTitle( $this->_namespaces[$key]['target'], $title->getText() );
-				$tabQuery = $this->getNamespace( $key, 'query', '' );
-				if ( $tabTitle->isKnown() ) {
-					$tabQuery = '';
+				if ( $this->getNamespace( $key, 'hideTalk' ) ) {
+					unset( $navigation[$talkId] ); // if inMainPage=false, then ignore hideTalk
 				}
+
+				$tabTitle = Title::makeTitle( $this->getNamespace( $key, 'target' ), $titleText );
+				$tabQuery = $this->getKeyQuery( $key, $tabTitle );
 				$navigation[$key] = $skinTemplate->tabAction(
 					$tabTitle, $this->getNamespace( $key, 'message' ), false, $tabQuery, $userCanRead
 				);
 				$navigation[$key]['weight'] = $this->getNamespace( $key, 'weight' );
 			}
-			$subjectId = $title->getNamespaceKey( '' );
-			if ( $subjectId === 'main' ) {
-				$talkId = 'talk';
-			} else {
-				$talkId = $subjectId . '_talk';
-			}
-			$navigation[$subjectId]['weight'] = self::MAIN_WEIGHT;
-			$navigation[$talkId]['weight'] = self::TALK_WEIGHT;
-			if ( $this->getNamespace( $key, 'hideTalk' ) ) {
-				unset( $navigation[$talkId] );
-			}
 			$this->sortNavigation( &$navigation );
-		} elseif ( array_key_exists( $subjectNS, $this->_namespacesToTarget ) ) {
+		} elseif ( array_key_exists( $subjectNS, $this->_namespacesToTarget ) ) { // in additional NS
 			$key = $this->_namespacesToTarget[$subjectNS];
 			$realSubjectNS = $this->getNamespace( $key, 'namespace' );
-			$subjectTitle = Title::makeTitle( $realSubjectNS, $title->getText() );
-			$talkTitle = Title::makeTitle( MWNamespace::getTalk( $realSubjectNS ), $title->getText() );
+			$subjectTitle = Title::makeTitle( $realSubjectNS, $titleText );
+			$talkTitle = Title::makeTitle( MWNamespace::getTalk( $realSubjectNS ), $titleText );
 
-			$subjectId = $subjectTitle->getNamespaceKey( '' );
-			if ( $subjectId === 'main' ) {
-				$talkId = 'talk';
-			} else {
-				$talkId = $subjectId . '_talk';
-			}
+			list( $subjectId, $talkId ) = $this->getDefaultTabsIDs( $subjectTitle );
 			$subjectMsg = array( 'nstab-' . $subjectId );
 			if ( $subjectTitle->isMainPage() ) {
 				array_unshift( $subjectMsg, 'mainpage-nstab' );
 			}
 
-			$navigation = array();
+			$navigation = array(); // rebuild namespaces
 			$navigation[$subjectId] = $skinTemplate->tabAction(
 				$subjectTitle, $subjectMsg, false, '', $userCanRead
 			);
@@ -118,29 +109,72 @@ class NamespaceRelations {
 			$navigation[$talkId]['weight'] = self::TALK_WEIGHT;
 
 			foreach ( $this->_namespacesToNamespace[$realSubjectNS] as $tabKey ) {
-				$tabTitle = Title::makeTitle( $this->getNamespace( $tabKey, 'target' ), $title->getText() );
+				$tabTitle = Title::makeTitle( $this->getNamespace( $tabKey, 'target' ), $titleText );
 				$isActive = $skinTemplate->getTitle()->equals( $tabTitle );
-				$tabQuery = $this->getNamespace( $key, 'query', '' );
-				if ( $tabTitle->isKnown() ) {
-					$tabQuery = '';
-				}
+				$tabQuery = $this->getKeyQuery( $tabKey, $tabTitle );
+
 				$navigation[$tabKey] = $skinTemplate->tabAction(
 					$tabTitle, $this->getNamespace( $tabKey, 'message' ), $isActive, $tabQuery, $userCanRead
 				);
 				$navigation[$tabKey]['weight'] = $this->getNamespace( $tabKey, 'weight' );
 
-				if ( isset( $navigation[$talkId] ) && $this->getNamespace( $tabKey, 'hideTalk' ) ) {
-					unset( $navigation[$talkId] );
+				if ( isset( $navigation[$talkId] ) ) {
+					if ( ( $subjectTitle->isMainPage()
+						&& $this->getNamespace( $tabKey, 'inMainPage' )
+						&& $this->getNamespace( $tabKey, 'hideTalk' ) )
+						|| $this->getNamespace( $tabKey, 'hideTalk' )
+					) {
+						unset( $navigation[$talkId] );
+					}
 				}
 			}
 			$this->sortNavigation( &$navigation );
 		}
 	}
 
+	/**
+	 * Navigation tabs sorting based on their weights
+	 *
+	 * @param array $navigation
+	 */
 	private function sortNavigation( $navigation ) {
 		uasort( &$navigation, function ( $first, $second ) {
 			return $first['weight'] - $second['weight'];
 		} );
+	}
+
+	/**
+	 * Checks if title is known and returns an appropriate query string
+	 *
+	 * @param string $key
+	 * @param Title $title
+	 *
+	 * @return string
+	 */
+	private function getKeyQuery( $key, $title ) {
+		if ( $title->isKnown() ) {
+			return '';
+		} else {
+			return $this->getNamespace( $key, 'query', '' );
+		}
+	}
+
+	/**
+	 * Returns Subject and Talk IDs according to given title
+	 *
+	 * @param Title $title
+	 *
+	 * @return array
+	 */
+	private function getDefaultTabsIDs( $title ) {
+		$subjectId = $title->getNamespaceKey( '' );
+		if ( $subjectId === 'main' ) {
+			$talkId = 'talk';
+		} else {
+			$talkId = $subjectId . '_talk';
+		}
+
+		return array( $subjectId, $talkId );
 	}
 
 	/**
@@ -160,6 +194,25 @@ class NamespaceRelations {
 		} else {
 			return $default;
 		}
+	}
+
+	/**
+	 * Sets full NS tab definition or one of its fields
+	 *
+	 * @param string $key NS tab key
+	 * @param string $param NS tab parameter
+	 * @param mixed $value Value to set, defines the whole tab if param is null
+	 *
+	 * @return NamespaceRelations
+	 */
+	private function setNamespace( $key, $param = null, $value = null ) {
+		if ( is_null( $param ) && !is_null( $value ) ) {
+			$this->_namespaces[$key] = $value;
+		} elseif ( !is_null( $param ) && !is_null( $value ) ) {
+			$this->_namespaces[$key][$param] = $value;
+		}
+
+		return $this;
 	}
 
 	/**
