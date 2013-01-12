@@ -52,6 +52,20 @@ $messages['ko'] = array(
 	'nsrels-desc' => '추가적인 이름공간 탭을 정의하는 것을 허용',
 );
 
+/** Macedonian (македонски)
+ * @author Bjankuloski06
+ */
+$messages['mk'] = array(
+	'nsrels-desc' => 'Овозможува задавање на дополнителни јазичиња за именски простори',
+);
+
+/** Dutch (Nederlands)
+ * @author Siebrand
+ */
+$messages['nl'] = array(
+	'nsrels-desc' => 'Maakt het mogelijk extra tabbladen voor naamruimten te definiëren',
+);
+
 /** Piedmontese (Piemontèis)
  * @author Dragonòt
  */
