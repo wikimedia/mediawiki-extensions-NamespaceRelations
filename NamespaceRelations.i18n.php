@@ -17,6 +17,13 @@ $messages['qqq'] = array(
 	'nsrels-desc' => '{{desc|name=Namespace Relations|url=http://www.mediawiki.org/wiki/Extension:NamespaceRelations}}',
 );
 
+/** Belarusian (Taraškievica orthography) (беларуская (тарашкевіца)‎)
+ * @author Wizardist
+ */
+$messages['be-tarask'] = array(
+	'nsrels-desc' => 'Дазваляе вызначэньне дадатковых закладак на прасторы назваў',
+);
+
 /** German (Deutsch)
  * @author Metalhead64
  */
