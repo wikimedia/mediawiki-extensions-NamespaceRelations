@@ -79,3 +79,10 @@ $messages['nl'] = array(
 $messages['pms'] = array(
 	'nsrels-desc' => 'A përmëtt ëd definì dle schede dë spassi nominaj adissionaj',
 );
+
+/** Ukrainian (українська)
+ * @author Ата
+ */
+$messages['uk'] = array(
+	'nsrels-desc' => 'Дозволяє визначити додаткові вкладки простору імен',
+);
