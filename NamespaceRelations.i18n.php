@@ -45,6 +45,13 @@ $messages['gl'] = array(
 	'nsrels-desc' => 'Permite definir lapelas de espazos de nomes adicionais',
 );
 
+/** Italian (italiano)
+ * @author Beta16
+ */
+$messages['it'] = array(
+	'nsrels-desc' => 'Permette di definire schede aggiuntive per namespace',
+);
+
 /** Japanese (日本語)
  * @author Shirayuki
  */
