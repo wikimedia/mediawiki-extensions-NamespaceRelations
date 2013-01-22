@@ -1,0 +1,12 @@
+== NamespaceRelations ==
+
+This extensions provides a way to define custom namespace tabs besides Subject and Talk tabs.
+
+To enable this extension, please add the following line to your LocalSettings.php:
+
+	require_once( "$IP/extensions/NamespaceRelations/NamespaceRelations.php" );
+
+== External links ==
+If you have any concerns about this extension, please refer to it's documentation:
+
+	https://www.mediawiki.org/wiki/Extension:NamespaceRelations
