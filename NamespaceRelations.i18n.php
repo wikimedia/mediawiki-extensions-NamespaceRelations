@@ -87,9 +87,23 @@ $messages['pms'] = array(
 	'nsrels-desc' => 'A përmëtt ëd definì dle schede dë spassi nominaj adissionaj',
 );
 
+/** tarandíne (tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'nsrels-desc' => "Permette de defin' schede de namespace aggiundive",
+);
+
 /** Ukrainian (українська)
  * @author Ата
  */
 $messages['uk'] = array(
 	'nsrels-desc' => 'Дозволяє визначити додаткові вкладки простору імен',
+);
+
+/** Simplified Chinese (中文（简体）‎)
+ * @author Yfdyh000
+ */
+$messages['zh-hans'] = array(
+	'nsrels-desc' => '允许定义额外的命名空间标签',
 );
