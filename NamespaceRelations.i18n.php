@@ -17,6 +17,13 @@ $messages['qqq'] = array(
 	'nsrels-desc' => '{{desc|name=Namespace Relations|url=http://www.mediawiki.org/wiki/Extension:NamespaceRelations}}',
 );
 
+/** Asturian (asturianu)
+ * @author Xuacu
+ */
+$messages['ast'] = array(
+	'nsrels-desc' => "Permite definir llingüetes d'espacios de nomes estra",
+);
+
 /** Belarusian (Taraškievica orthography) (беларуская (тарашкевіца)‎)
  * @author Wizardist
  */
