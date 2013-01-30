@@ -38,6 +38,13 @@ $messages['de'] = array(
 	'nsrels-desc' => 'Ergänzt zusätzliche Namensraumreiter',
 );
 
+/** Spanish (español)
+ * @author Fitoschido
+ */
+$messages['es'] = array(
+	'nsrels-desc' => 'Permite definir pestañas de espacios de nombres adicionales',
+);
+
 /** French (français)
  * @author Gomoko
  */
