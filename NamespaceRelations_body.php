@@ -179,7 +179,7 @@ class NamespaceRelations {
 			}
 		}
 
-		$this->sortNavigation( &$tabs ); // sort the tabs according to their weights
+		$this->sortNavigation( $tabs ); // sort the tabs according to their weights
 		$navigation = array(); // rebuild the navigation
 		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs( $title ); // get Subject&Talk IDs
 		foreach ( $tabs as $key => $definition ) {
@@ -310,10 +310,10 @@ class NamespaceRelations {
 	/**
 	 * Sorts namespace tabs according to their appropriate weights
 	 *
-	 * @param array $navigation
+	 * @param array &$navigation
 	 */
-	private function sortNavigation( $navigation ) {
-		uasort( &$navigation, function ( $first, $second ) {
+	private function sortNavigation( &$navigation ) {
+		uasort( $navigation, function ( $first, $second ) {
 			return $first['weight'] - $second['weight'];
 		} );
 	}
