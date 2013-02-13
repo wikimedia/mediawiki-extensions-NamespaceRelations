@@ -7,14 +7,18 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 // Primary stuff
 $dir = __DIR__;
-$wgAutoloadClasses['NamespaceRelationsHooks'] = $dir . '/NamespaceRelations.hooks.php';
 $wgAutoloadClasses['NamespaceRelations'] = $dir . '/NamespaceRelations_body.php';
 
 // Internationalization
 $wgExtensionMessagesFiles['NamespaceRelations'] = $dir . '/NamespaceRelations.i18n.php';
 
 // Attaching to hooks
-$wgHooks['SkinTemplateNavigation'][] = 'NamespaceRelationsHooks::onSkinTemplateNavigation';
+$wgHooks['SkinTemplateNavigation'][] = function( $skinTemplate, &$navigation ) {
+	$nsRelations = new NamespaceRelations();
+	$nsRelations->injectTabs( $skinTemplate, $navigation['namespaces'] );
+
+	return true;
+};
 
 $wgExtensionCredits['other'][] = array(
 	'path'           => __FILE__,

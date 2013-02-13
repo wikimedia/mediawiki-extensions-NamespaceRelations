@@ -69,7 +69,7 @@ class NamespaceRelations {
 	 * @param SkinTemplate $skinTemplate
 	 * @param array $navigation
 	 */
-	public function injectTabs( $skinTemplate, $navigation ) {
+	public function injectTabs( $skinTemplate, &$navigation ) {
 		$title = $skinTemplate->getRelevantTitle();
 		$titleText = $title->getText();
 		$subjectNS = $title->getSubjectPage()->getNamespace();
