@@ -177,6 +177,8 @@ class NamespaceRelations {
 					}
 				}
 			}
+		} else { // do nothing if the current namespace is not affected by the config
+			return;
 		}
 
 		$this->sortNavigation( $tabs ); // sort the tabs according to their weights
