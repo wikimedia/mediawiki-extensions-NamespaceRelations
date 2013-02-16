@@ -38,6 +38,13 @@ $messages['de'] = array(
 	'nsrels-desc' => 'Ergänzt zusätzliche Namensraumreiter',
 );
 
+/** Lower Sorbian (dolnoserbski)
+ * @author Michawiki
+ */
+$messages['dsb'] = array(
+	'nsrels-desc' => 'Zmóžnja definěrowanje pśidatnych rejtarkow mjenjowych rumow',
+);
+
 /** Spanish (español)
  * @author Fitoschido
  */
@@ -57,6 +64,13 @@ $messages['fr'] = array(
  */
 $messages['gl'] = array(
 	'nsrels-desc' => 'Permite definir lapelas de espazos de nomes adicionais',
+);
+
+/** Upper Sorbian (hornjoserbsce)
+ * @author Michawiki
+ */
+$messages['hsb'] = array(
+	'nsrels-desc' => 'Zmóžnja definowanje přidatnych rajtarkow mjenowych rumow',
 );
 
 /** Italian (italiano)
