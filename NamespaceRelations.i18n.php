@@ -94,6 +94,13 @@ $messages['ko'] = array(
 	'nsrels-desc' => '추가적인 이름공간 탭을 정의하는 것을 허용',
 );
 
+/** Luxembourgish (Lëtzebuergesch)
+ * @author Robby
+ */
+$messages['lb'] = array(
+	'nsrels-desc' => 'Erméiglecht et zousätzlech Nummraum-Tabs ze definéieren',
+);
+
 /** Macedonian (македонски)
  * @author Bjankuloski06
  */
