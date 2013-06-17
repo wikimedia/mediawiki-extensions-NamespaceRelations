@@ -149,3 +149,10 @@ $messages['uk'] = array(
 $messages['zh-hans'] = array(
 	'nsrels-desc' => '允许定义额外的命名空间标签',
 );
+
+/** Traditional Chinese (中文（繁體）‎)
+ * @author Justincheng12345
+ */
+$messages['zh-hant'] = array(
+	'nsrels-desc' => '容許定義額外名字空間',
+);
