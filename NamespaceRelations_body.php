@@ -11,24 +11,28 @@ class NamespaceRelations {
 
 	/**
 	 * Processed $wgNamespaceRelations configuration
+	 *
 	 * @var array
 	 */
 	private $_namespaces;
 
 	/**
 	 * References to $this->_namespaces per target
+	 *
 	 * @var array
 	 */
 	private $_namespacesToTarget;
 
 	/**
 	 * References to $this->_namespaces per allowed namespace
+	 *
 	 * @var array
 	 */
 	private $_namespacesToNamespace;
 
 	/**
 	 * Per-namespace array of patterns to match against the title
+	 *
 	 * @var array
 	 */
 	private $_namespacesSubjectPattern;
@@ -38,16 +42,16 @@ class NamespaceRelations {
 
 		$this->_namespaces = array();
 		if ( !empty( $wgNamespaceRelations ) ) {
-			$sortingWeight = self::STARTING_WEIGHT;
 			foreach ( $wgNamespaceRelations as $key => $data ) {
-				$this->setNamespace( $key, null, array(
-					'message'    => 'nstab-extra-' . $key,
-					'namespace'  => $data['namespace'],
-					'target'     => $data['target'],
-					'inMainPage' => isset( $data['inMainPage'] ) ? $data['inMainPage'] : false,
-					'query'      => isset( $data['query'] ) ? $data['query'] : '',
-					'hideTalk'   => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
-				) );
+				$this->setNamespace( $key, null,
+					array(
+					     'message'    => 'nstab-extra-' . $key,
+					     'namespace'  => $data['namespace'],
+					     'target'     => $data['target'],
+					     'inMainPage' => isset( $data['inMainPage'] ) ? $data['inMainPage'] : false,
+					     'query'      => isset( $data['query'] ) ? $data['query'] : '',
+					     'hideTalk'   => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
+					) );
 				if ( !isset( $data['weight'] ) ) {
 					$this->setNamespace( $key, 'weight', $this->generateWeight() );
 				} else {
@@ -125,8 +129,7 @@ class NamespaceRelations {
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
-				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ),
-					$this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
+				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ), $this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
 				unset( $tabOptions );
 			}
 		} elseif ( array_key_exists( $subjectNS, $this->_namespacesToTarget ) ) { // in additional NS
@@ -163,15 +166,11 @@ class NamespaceRelations {
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
-				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ),
-					$this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
+				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ), $this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
 				unset( $tabOptions );
 
 				if ( isset( $tabs['talk'] ) ) {
-					if ( ( $tabs['subject']['title']->isMainPage()
-						&& $this->getNamespace( $key, 'inMainPage' )
-						&& $this->getNamespace( $key, 'hideTalk' ) )
-						|| $this->getNamespace( $key, 'hideTalk' )
+					if ( ( $tabs['subject']['title']->isMainPage() && $this->getNamespace( $key, 'inMainPage' ) && $this->getNamespace( $key, 'hideTalk' ) ) || $this->getNamespace( $key, 'hideTalk' )
 					) {
 						unset( $tabs['talk'] );
 					}
@@ -183,7 +182,9 @@ class NamespaceRelations {
 
 		$this->sortNavigation( $tabs ); // sort the tabs according to their weights
 		$navigation = array(); // rebuild the navigation
-		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs( $title ); // get Subject&Talk IDs
+
+		// get Subject&Talk IDs
+		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs( $tabs['subject']['title'] );
 		foreach ( $tabs as $key => $definition ) {
 			$tabId = $key;
 			// assign real IDs to default $navigation members
@@ -192,10 +193,7 @@ class NamespaceRelations {
 			} elseif ( $key === 'talk' ) {
 				$tabId = $talkTabId;
 			}
-			$navigation[$tabId] = $skinTemplate->tabAction(
-				$definition['title'], $definition['messages'], $definition['isActive'], $definition['query'],
-				$definition['checkExists']
-			);
+			$navigation[$tabId] = $skinTemplate->tabAction( $definition['title'], $definition['messages'], $definition['isActive'], $definition['query'], $definition['checkExists'] );
 			// for subject/talk it's essential, otherwise MediaWiki will just ignore it
 			$navigation[$tabId]['context'] = $key;
 		}
@@ -369,7 +367,10 @@ class NamespaceRelations {
 			$talkId = $subjectId . '_talk';
 		}
 
-		return array( $subjectId, $talkId );
+		return array(
+			$subjectId,
+			$talkId
+		);
 	}
 
 	/**
