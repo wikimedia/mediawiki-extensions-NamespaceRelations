@@ -14,9 +14,10 @@ $wgExtensionMessagesFiles['NamespaceRelations'] = $dir . '/NamespaceRelations.i1
 
 // Attaching to hooks
 $wgHooks['SkinTemplateNavigation'][] = function( $skinTemplate, &$navigation ) {
+	wfProfileIn( 'NamespaceRelations: wrapper profile' );
 	$nsRelations = new NamespaceRelations();
 	$nsRelations->injectTabs( $skinTemplate, $navigation['namespaces'] );
-
+	wfProfileOut( 'NamespaceRelations: wrapper profile' );
 	return true;
 };
 
