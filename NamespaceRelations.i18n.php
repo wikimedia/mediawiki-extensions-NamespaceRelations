@@ -122,6 +122,13 @@ $messages['nl'] = array(
 	'nsrels-desc' => 'Maakt het mogelijk extra tabbladen voor naamruimten te definiëren',
 );
 
+/** Occitan (occitan)
+ * @author Cedric31
+ */
+$messages['oc'] = array(
+	'nsrels-desc' => "Permet de definir d'onglets d'espaci de noms suplementaris",
+);
+
 /** Piedmontese (Piemontèis)
  * @author Dragonòt
  */
