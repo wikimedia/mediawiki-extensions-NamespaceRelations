@@ -136,6 +136,20 @@ $messages['pms'] = array(
 	'nsrels-desc' => 'A përmëtt ëd definì dle schede dë spassi nominaj adissionaj',
 );
 
+/** Portuguese (português)
+ * @author Cainamarques
+ */
+$messages['pt'] = array(
+	'nsrels-desc' => 'Permite definir e adicionar abas de domínio à interface',
+);
+
+/** Brazilian Portuguese (português do Brasil)
+ * @author Cainamarques
+ */
+$messages['pt-br'] = array(
+	'nsrels-desc' => 'Permite definir e adicionar abas de domínio à interface',
+);
+
 /** tarandíne (tarandíne)
  * @author Joetaras
  */
