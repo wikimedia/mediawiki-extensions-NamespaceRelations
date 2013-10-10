@@ -157,6 +157,13 @@ $messages['roa-tara'] = array(
 	'nsrels-desc' => "Permette de defin' schede de namespace aggiundive",
 );
 
+/** Russian (русский)
+ * @author Okras
+ */
+$messages['ru'] = array(
+	'nsrels-desc' => 'Позволяет определить дополнительные вкладки пространства имён',
+);
+
 /** Ukrainian (українська)
  * @author Ата
  */
