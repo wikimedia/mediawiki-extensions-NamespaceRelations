@@ -138,9 +138,10 @@ $messages['pms'] = array(
 
 /** Portuguese (português)
  * @author Cainamarques
+ * @author Hamilton Abreu
  */
 $messages['pt'] = array(
-	'nsrels-desc' => 'Permite definir e adicionar abas de domínio à interface',
+	'nsrels-desc' => 'Permite acrescentar separadores de espaços nominais à interface, adicionais aos do assunto e de discussão',
 );
 
 /** Brazilian Portuguese (português do Brasil)
