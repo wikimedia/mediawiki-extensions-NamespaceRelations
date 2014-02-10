@@ -52,6 +52,13 @@ $messages['es'] = array(
 	'nsrels-desc' => 'Permite definir pestañas de espacios de nombres adicionales',
 );
 
+/** Persian (فارسی)
+ * @author Armin1392
+ */
+$messages['fa'] = array(
+	'nsrels-desc' => 'اجازه به تعریف تب‌های فضای نام اضافی',
+);
+
 /** French (français)
  * @author Gomoko
  */
