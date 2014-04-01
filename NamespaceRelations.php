@@ -10,6 +10,7 @@ $dir = __DIR__;
 $wgAutoloadClasses['NamespaceRelations'] = $dir . '/NamespaceRelations_body.php';
 
 // Internationalization
+$wgMessagesDirs['NamespaceRelations'] = __DIR__ . '/i18n';
 $wgExtensionMessagesFiles['NamespaceRelations'] = $dir . '/NamespaceRelations.i18n.php';
 
 // Attaching to hooks
@@ -27,7 +28,7 @@ $wgExtensionCredits['other'][] = array(
 	'author'         => array( 'Pavel Selitskas' ),
 	'url'            => 'https://www.mediawiki.org/wiki/Extension:NamespaceRelations',
 	'descriptionmsg' => 'nsrels-desc',
-	'version'        => '0.1',
+	'version'        => '0.2.0',
 );
 
 // global variables
