@@ -1,9 +1,9 @@
 {
-    "@metadata": {
-        "authors": [
-            "Raymond",
-            "Shirayuki"
-        ]
-    },
-    "nsrels-desc": "{{desc|name=Namespace Relations|url=http://www.mediawiki.org/wiki/Extension:NamespaceRelations}}"
+	"@metadata": {
+		"authors": [
+			"Raymond",
+			"Shirayuki"
+		]
+	},
+	"nsrels-desc": "{{desc|name=Namespace Relations|url=http://www.mediawiki.org/wiki/Extension:NamespaceRelations}}"
 }
