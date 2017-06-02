@@ -38,7 +38,6 @@ class NamespaceRelations {
 	private $_namespacesSubjectPattern;
 
 	public function __construct() {
-		wfProfileIn( 'NamespaceRelations: ' . __METHOD__ );
 		global $wgNamespaceRelations;
 
 		$this->_namespaces = array();
@@ -68,7 +67,6 @@ class NamespaceRelations {
 				$this->addToTarget( $data['target'], $key );
 			}
 		}
-		wfProfileOut( 'NamespaceRelations: ' . __METHOD__ );
 	}
 
 	/**
@@ -182,7 +180,6 @@ class NamespaceRelations {
 			return;
 		}
 
-		wfProfileIn( 'NamespaceRelations: tabs assembly in ' . __METHOD__ );
 		$this->sortNavigation( $tabs ); // sort the tabs according to their weights
 		$navigation = array(); // rebuild the navigation
 
@@ -200,7 +197,6 @@ class NamespaceRelations {
 			// for subject/talk it's essential, otherwise MediaWiki will just ignore it
 			$navigation[$tabId]['context'] = $key;
 		}
-		wfProfileOut( 'NamespaceRelations: tabs assembly in ' . __METHOD__ );
 	}
 
 	/**
@@ -273,7 +269,6 @@ class NamespaceRelations {
 	 * @return array
 	 */
 	private function makeTab( $tabNS, $tabTitle, $options = array() ) {
-		wfProfileIn( 'NamespaceRelations: ' . __METHOD__ );
 		$defaultOptions = array(
 			'messages'    => array(),
 			'isActive'    => false,
@@ -288,7 +283,6 @@ class NamespaceRelations {
 			$options['title'] = Title::makeTitle( $tabNS, $tabTitle );
 		}
 
-		wfProfileOut( 'NamespaceRelations: ' . __METHOD__ );
 		return $options;
 	}
 
