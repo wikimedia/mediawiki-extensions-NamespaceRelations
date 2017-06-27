@@ -7,40 +7,40 @@ class NamespaceRelations {
 	const STARTING_WEIGHT = 20;
 	const WEIGHT_INCREMENT = 10;
 
-	private $_currentWeight = self::STARTING_WEIGHT;
+	private $currentWeight = self::STARTING_WEIGHT;
 
 	/**
 	 * Processed $wgNamespaceRelations configuration
 	 *
 	 * @var array
 	 */
-	private $_namespaces;
+	private $namespaces;
 
 	/**
-	 * References to $this->_namespaces per target
+	 * References to $this->namespaces per target
 	 *
 	 * @var array
 	 */
-	private $_namespacesToTarget;
+	private $namespacesToTarget;
 
 	/**
-	 * References to $this->_namespaces per allowed namespace
+	 * References to $this->namespaces per allowed namespace
 	 *
 	 * @var array
 	 */
-	private $_namespacesToNamespace;
+	private $namespacesToNamespace;
 
 	/**
 	 * Per-namespace array of patterns to match against the title
 	 *
 	 * @var array
 	 */
-	private $_namespacesSubjectPattern;
+	private $namespacesSubjectPattern;
 
 	public function __construct() {
 		global $wgNamespaceRelations;
 
-		$this->_namespaces = array();
+		$this->namespaces = array();
 		if ( !empty( $wgNamespaceRelations ) ) {
 			foreach ( $wgNamespaceRelations as $key => $data ) {
 				$this->setNamespace( $key, null,
@@ -58,7 +58,8 @@ class NamespaceRelations {
 					$this->setNamespace( $key, 'weight', $data['weight'] );
 				}
 				if ( isset( $data['customTarget'] ) ) {
-					$this->_namespacesSubjectPattern[$this->getNamespace( $key, 'target' )][] =
+					$this->namespacesSubjectPattern[$this->getNamespace(
+						$key, 'target' )][] =
 						'#^' . str_replace( '$1', '(.*)', $data['customTarget'] ) . '$#';
 					$this->setNamespace( $key, 'customTarget', $data['customTarget'] );
 				}
@@ -77,7 +78,8 @@ class NamespaceRelations {
 		$title = $skinTemplate->getRelevantTitle();
 		$titleText = $title->getText();
 		$subjectNS = $title->getSubjectPage()->getNamespace();
-		$rootText = $this->getRootTitle( $titleText, $subjectNS ); // the root title to link other tabs against
+		$rootText = $this->getRootTitle( $titleText, $subjectNS );
+		// the root title to link other tabs against
 		$userCanRead = $title->quickUserCan( 'read', $skinTemplate->getUser() );
 
 		/**
@@ -92,27 +94,40 @@ class NamespaceRelations {
 		 */
 		$tabs = array();
 
-		if ( array_key_exists( $subjectNS, $this->_namespacesToNamespace ) ) { // in Main/Talk NS
+		if ( array_key_exists( $subjectNS, $this->namespacesToNamespace ) ) {
+			// in Main/Talk NS
 			// make a Subject tab
 			$subjectOptions['checkExists'] = $userCanRead;
 			$subjectOptions['title'] = Title::makeTitle( $subjectNS, $rootText );
 			if ( $title->equals( $subjectOptions['title'] ) ) {
 				$subjectOptions['isActive'] = true;
 			}
-			$tabs['subject'] = $this->makeSubjectTab( $subjectNS, $rootText, $subjectOptions );
-			unset( $subjectOptions );
+			$tabs['subject'] = $this->makeSubjectTab(
+				$subjectNS,
+				$rootText,
+				$subjectOptions
+			);
 
 			// make a Talk tab
 			$talkOptions['checkExists'] = $userCanRead;
-			$talkOptions['title'] = Title::makeTitle( MWNamespace::getTalk( $subjectNS ), $rootText );
+			$talkOptions['title'] = Title::makeTitle(
+				MWNamespace::getTalk( $subjectNS ),
+				$rootText
+			);
 			if ( $title->equals( $talkOptions['title'] ) ) {
 				$talkOptions['isActive'] = true;
 			}
-			$tabs['talk'] = $this->makeTalkTab( MWNamespace::getTalk( $subjectNS ), $rootText, $talkOptions );
+			$tabs['talk'] = $this->makeTalkTab(
+				MWNamespace::getTalk( $subjectNS ),
+				$rootText,
+				$talkOptions
+			);
 			unset( $talkOptions );
 
-			foreach ( $this->_namespacesToNamespace[$subjectNS] as $key ) {
-				if ( $title->getSubjectPage()->isMainPage() && !$this->getNamespace( $key, 'inMainPage' ) ) {
+			foreach ( $this->namespacesToNamespace[$subjectNS] as $key ) {
+				if ( $title->getSubjectPage()->isMainPage()
+					&& !$this->getNamespace( $key, 'inMainPage' )
+				) {
 					continue;
 				}
 				if ( $this->getNamespace( $key, 'hideTalk' ) ) {
@@ -122,19 +137,30 @@ class NamespaceRelations {
 				$tabOptions = array(
 					'title'       => $this->getCustomTargetTitle( $key, $rootText ),
 					'messages'    => $this->getNamespace( $key, 'message' ),
-					'query'       => $this->getKeyQuery( $key, $this->getCustomTargetTitle( $key, $rootText ) ),
+					'query'       => $this->getKeyQuery(
+						$key,
+						$this->getCustomTargetTitle( $key, $rootText )
+					),
 					'checkExists' => $userCanRead,
 					'weight'      => $this->getNamespace( $key, 'weight' )
 				);
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
-				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ), $this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
+				$tabs[$key] = $this->makeTab(
+					$this->getNamespace( $key, 'target' ),
+					$this->getCustomTargetTitle( $key, $rootText, true ),
+					$tabOptions
+				);
 				unset( $tabOptions );
 			}
-		} elseif ( array_key_exists( $subjectNS, $this->_namespacesToTarget ) ) { // in additional NS
+		} elseif ( array_key_exists( $subjectNS, $this->namespacesToTarget ) ) {
+			// in additional NS
 			// redefine the subject namespace to point to the real one
-			$subjectNS = $this->getNamespace( $this->_namespacesToTarget[$subjectNS], 'namespace' );
+			$subjectNS = $this->getNamespace(
+				$this->namespacesToTarget[$subjectNS],
+				'namespace'
+			);
 
 			// make a Subject tab
 			$subjectOptions['checkExists'] = $userCanRead;
@@ -142,23 +168,36 @@ class NamespaceRelations {
 			if ( $title->equals( $subjectOptions['title'] ) ) {
 				$subjectOptions['isActive'] = true;
 			}
-			$tabs['subject'] = $this->makeSubjectTab( $subjectNS, $rootText, $subjectOptions );
-			unset( $subjectOptions );
+			$tabs['subject'] = $this->makeSubjectTab(
+				$subjectNS,
+				$rootText,
+				$subjectOptions
+			);
 
 			// make a Talk tab
 			$talkOptions['checkExists'] = $userCanRead;
-			$talkOptions['title'] = Title::makeTitle( MWNamespace::getTalk( $subjectNS ), $rootText );
+			$talkOptions['title'] = Title::makeTitle(
+				MWNamespace::getTalk( $subjectNS ),
+				$rootText
+			);
 			if ( $title->equals( $talkOptions['title'] ) ) {
 				$talkOptions['isActive'] = true;
 			}
-			$tabs['talk'] = $this->makeTalkTab( MWNamespace::getTalk( $subjectNS ), $rootText, $talkOptions );
+			$tabs['talk'] = $this->makeTalkTab(
+				MWNamespace::getTalk( $subjectNS ),
+				$rootText,
+				$talkOptions
+			);
 			unset( $talkOptions );
 
-			foreach ( $this->_namespacesToNamespace[$subjectNS] as $key ) {
+			foreach ( $this->namespacesToNamespace[$subjectNS] as $key ) {
 				$tabOptions = array(
 					'title'       => $this->getCustomTargetTitle( $key, $rootText ),
 					'messages'    => $this->getNamespace( $key, 'message' ),
-					'query'       => $this->getKeyQuery( $key, $this->getCustomTargetTitle( $key, $rootText ) ),
+					'query'       => $this->getKeyQuery(
+						$key,
+						$this->getCustomTargetTitle( $key, $rootText )
+					),
 					'checkExists' => $userCanRead,
 					'weight'      => $this->getNamespace( $key, 'weight' ),
 					'isActive'    => false
@@ -166,11 +205,19 @@ class NamespaceRelations {
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
-				$tabs[$key] = $this->makeTab( $this->getNamespace( $key, 'target' ), $this->getCustomTargetTitle( $key, $rootText, true ), $tabOptions );
+				$tabs[$key] = $this->makeTab(
+					$this->getNamespace( $key, 'target' ),
+					$this->getCustomTargetTitle( $key, $rootText, true ),
+					$tabOptions
+				);
 				unset( $tabOptions );
 
 				if ( isset( $tabs['talk'] ) ) {
-					if ( ( $tabs['subject']['title']->isMainPage() && $this->getNamespace( $key, 'inMainPage' ) && $this->getNamespace( $key, 'hideTalk' ) ) || $this->getNamespace( $key, 'hideTalk' )
+					if (
+						( $tabs['subject']['title']->isMainPage()
+						&& $this->getNamespace( $key, 'inMainPage' )
+						&& $this->getNamespace( $key, 'hideTalk' ) )
+						|| $this->getNamespace( $key, 'hideTalk' )
 					) {
 						unset( $tabs['talk'] );
 					}
@@ -184,7 +231,9 @@ class NamespaceRelations {
 		$navigation = array(); // rebuild the navigation
 
 		// get Subject&Talk IDs
-		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs( $tabs['subject']['title'] );
+		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs(
+			$tabs['subject']['title']
+		);
 		foreach ( $tabs as $key => $definition ) {
 			$tabId = $key;
 			// assign real IDs to default $navigation members
@@ -193,7 +242,13 @@ class NamespaceRelations {
 			} elseif ( $key === 'talk' ) {
 				$tabId = $talkTabId;
 			}
-			$navigation[$tabId] = $skinTemplate->tabAction( $definition['title'], $definition['messages'], $definition['isActive'], $definition['query'], $definition['checkExists'] );
+			$navigation[$tabId] = $skinTemplate->tabAction(
+				$definition['title'],
+				$definition['messages'],
+				$definition['isActive'],
+				$definition['query'],
+				$definition['checkExists']
+			);
 			// for subject/talk it's essential, otherwise MediaWiki will just ignore it
 			$navigation[$tabId]['context'] = $key;
 		}
@@ -327,8 +382,8 @@ class NamespaceRelations {
 	 * @return string
 	 */
 	private function getRootTitle( $title, $namespace ) {
-		if ( isset( $this->_namespacesSubjectPattern[$namespace] ) ) {
-			foreach ( $this->_namespacesSubjectPattern[$namespace] as $pattern ) {
+		if ( isset( $this->namespacesSubjectPattern[$namespace] ) ) {
+			foreach ( $this->namespacesSubjectPattern[$namespace] as $pattern ) {
 				$title = preg_replace( $pattern, '$1', $title );
 			}
 		}
@@ -383,10 +438,12 @@ class NamespaceRelations {
 	 * @return array|mixed
 	 */
 	private function getNamespace( $key, $param = null, $default = null ) {
-		if ( is_null( $param ) && isset( $this->_namespaces[$key] ) ) {
-			return $this->_namespaces[$key];
-		} elseif ( isset( $this->_namespaces[$key][$param] ) && !is_null( $this->_namespaces[$key][$param] ) ) {
-			return $this->_namespaces[$key][$param];
+		if ( is_null( $param ) && isset( $this->namespaces[$key] ) ) {
+			return $this->namespaces[$key];
+		} elseif ( isset( $this->namespaces[$key][$param] )
+			&& !is_null( $this->namespaces[$key][$param] )
+		) {
+			return $this->namespaces[$key][$param];
 		} else {
 			return $default;
 		}
@@ -403,9 +460,9 @@ class NamespaceRelations {
 	 */
 	private function setNamespace( $key, $param = null, $value = null ) {
 		if ( is_null( $param ) && !is_null( $value ) ) {
-			$this->_namespaces[$key] = $value;
+			$this->namespaces[$key] = $value;
 		} elseif ( !is_null( $param ) && !is_null( $value ) ) {
-			$this->_namespaces[$key][$param] = $value;
+			$this->namespaces[$key][$param] = $value;
 		}
 
 		return $this;
@@ -421,7 +478,7 @@ class NamespaceRelations {
 	 */
 	private function addToNamespace( $ns, $key ) {
 		if ( MWNamespace::exists( $ns ) ) {
-			$this->_namespacesToNamespace[$ns][] = $key;
+			$this->namespacesToNamespace[$ns][] = $key;
 		} else {
 			throw new MWException( "Namespace doesn't exist." );
 		}
@@ -437,7 +494,7 @@ class NamespaceRelations {
 	 */
 	private function addToTarget( $ns, $key ) {
 		if ( MWNamespace::exists( $ns ) ) {
-			$this->_namespacesToTarget[$ns] = $key;
+			$this->namespacesToTarget[$ns] = $key;
 		} else {
 			throw new MWException( "Namespace doesn't exist." );
 		}
@@ -451,8 +508,8 @@ class NamespaceRelations {
 	 * @return int
 	 */
 	private function generateWeight( $increment = self::WEIGHT_INCREMENT ) {
-		$this->_currentWeight += $increment;
+		$this->currentWeight += $increment;
 
-		return $this->_currentWeight;
+		return $this->currentWeight;
 	}
 }
