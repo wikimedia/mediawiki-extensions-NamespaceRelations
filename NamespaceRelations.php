@@ -11,7 +11,6 @@ $wgAutoloadClasses['NamespaceRelations'] = $dir . '/NamespaceRelations_body.php'
 
 // Internationalization
 $wgMessagesDirs['NamespaceRelations'] = __DIR__ . '/i18n';
-$wgExtensionMessagesFiles['NamespaceRelations'] = $dir . '/NamespaceRelations.i18n.php';
 
 // Attaching to hooks
 $wgHooks['SkinTemplateNavigation'][] = function( $skinTemplate, &$navigation ) {
