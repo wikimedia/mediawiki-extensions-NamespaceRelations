@@ -43,6 +43,8 @@ class NamespaceRelations {
 		global $wgNamespaceRelations;
 
 		$this->namespaces = array();
+		$this->namespacesToTarget = array();
+		$this->namespacesToNamespace = array();
 		if ( !empty( $wgNamespaceRelations ) ) {
 			foreach ( $wgNamespaceRelations as $key => $data ) {
 				$this->setNamespace( $key, null,
