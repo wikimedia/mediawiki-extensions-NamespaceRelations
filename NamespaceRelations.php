@@ -1,35 +1,15 @@
 <?php
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	echo "This is the NamespaceRelations extension. Please see the README file for installation instructions.\n";
-	exit( 1 );
+if ( function_exists( 'wfLoadExtension' ) ) {
+	wfLoadExtension( 'NamespaceRelations' );
+	// Keep i18n globals so mergeMessageFileList.php doesn't break
+	$wgMessagesDirs['NamespaceRelations'] = __DIR__ . '/i18n';
+	wfWarn(
+		'Deprecated PHP entry point used for the NamespaceRelations extension. ' .
+		'Please use wfLoadExtension() instead, ' .
+		'see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Extension_registration for more details.'
+	);
+	return;
+} else {
+	die( 'This version of the NamespaceRelations extension requires MediaWiki 1.29+' );
 }
-
-// Primary stuff
-$dir = __DIR__;
-$wgAutoloadClasses['NamespaceRelations'] = $dir . '/NamespaceRelations_body.php';
-
-// Internationalization
-$wgMessagesDirs['NamespaceRelations'] = __DIR__ . '/i18n';
-
-// Attaching to hooks
-$wgHooks['SkinTemplateNavigation'][] = function( $skinTemplate, &$navigation ) {
-	$nsRelations = new NamespaceRelations();
-	$nsRelations->injectTabs( $skinTemplate, $navigation['namespaces'] );
-	return true;
-};
-
-$wgExtensionCredits['other'][] = array(
-	'path'           => __FILE__,
-	'name'           => 'NamespaceRelations',
-	'author'         => array( 'Pavel Selitskas' ),
-	'url'            => 'https://www.mediawiki.org/wiki/Extension:NamespaceRelations',
-	'descriptionmsg' => 'nsrels-desc',
-	'version'        => '0.2.0',
-);
-
-// global variables
-/**
- * Define extra namespaces and how they relate to the basic set of namespaces.
- */
-$wgNamespaceRelations = array();

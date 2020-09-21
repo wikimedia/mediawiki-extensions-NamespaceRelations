@@ -1,0 +1,32 @@
+{
+	"name": "NamespaceRelations",
+	"version": "0.3.0",
+	"author": [
+		"Pavel Selitskas"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:NamespaceRelations",
+	"descriptionmsg": "nsrels-desc",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.29.0"
+	},
+	"MessagesDirs": {
+		"NamespaceRelations": [
+			"i18n"
+		]
+	},
+	"AutoloadClasses": {
+		"NamespaceRelations": "NamespaceRelations_body.php",
+		"NamespaceRelationsHooks": "NamespaceRelationsHooks.php"
+	},
+	"Hooks": {
+		"SkinTemplateNavigationUniversal": "NamespaceRelationsHooks::onSkinTemplateNavigationUniversal"
+	},
+	"config": {
+		"NamespaceRelations": {
+			"description": "Define extra namespaces and how they relate to the basic set of namespaces.",
+			"value": []
+		}
+	},
+	"manifest_version": 2
+}
