@@ -42,20 +42,20 @@ class NamespaceRelations {
 	public function __construct() {
 		global $wgNamespaceRelations;
 
-		$this->namespaces = array();
-		$this->namespacesToTarget = array();
-		$this->namespacesToNamespace = array();
+		$this->namespaces = [];
+		$this->namespacesToTarget = [];
+		$this->namespacesToNamespace = [];
 		if ( !empty( $wgNamespaceRelations ) ) {
 			foreach ( $wgNamespaceRelations as $key => $data ) {
 				$this->setNamespace( $key, null,
-					array(
-					     'message'    => 'nstab-extra-' . $key,
-					     'namespace'  => $data['namespace'],
-					     'target'     => $data['target'],
-					     'inMainPage' => isset( $data['inMainPage'] ) ? $data['inMainPage'] : false,
-					     'query'      => isset( $data['query'] ) ? $data['query'] : '',
-					     'hideTalk'   => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
-					) );
+					[
+						 'message'    => 'nstab-extra-' . $key,
+						 'namespace'  => $data['namespace'],
+						 'target'     => $data['target'],
+						 'inMainPage' => isset( $data['inMainPage'] ) ? $data['inMainPage'] : false,
+						 'query'      => isset( $data['query'] ) ? $data['query'] : '',
+						 'hideTalk'   => isset( $data['hideTalk'] ) ? $data['hideTalk'] : false
+					] );
 				if ( !isset( $data['weight'] ) ) {
 					$this->setNamespace( $key, 'weight', $this->generateWeight() );
 				} else {
@@ -76,7 +76,7 @@ class NamespaceRelations {
 
 	/**
 	 * @param SkinTemplate $skinTemplate
-	 * @param array $navigation
+	 * @param array &$navigation
 	 */
 	public function injectTabs( $skinTemplate, &$navigation ) {
 		$title = $skinTemplate->getRelevantTitle();
@@ -104,7 +104,7 @@ class NamespaceRelations {
 		 * ** int $weight weight
 		 * ** string $context context
 		 */
-		$tabs = array();
+		$tabs = [];
 
 		if ( array_key_exists( $subjectNS, $this->namespacesToNamespace ) ) {
 			// in Main/Talk NS
@@ -146,7 +146,7 @@ class NamespaceRelations {
 					unset( $tabs['talk'] ); // if inMainPage=false, then ignore hideTalk
 				}
 
-				$tabOptions = array(
+				$tabOptions = [
 					'title'       => $this->getCustomTargetTitle( $key, $rootText ),
 					'messages'    => $this->getNamespace( $key, 'message' ),
 					'query'       => $this->getKeyQuery(
@@ -155,7 +155,7 @@ class NamespaceRelations {
 					),
 					'checkExists' => $userCanRead,
 					'weight'      => $this->getNamespace( $key, 'weight' )
-				);
+				];
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
@@ -203,7 +203,7 @@ class NamespaceRelations {
 			unset( $talkOptions );
 
 			foreach ( $this->namespacesToNamespace[$subjectNS] as $key ) {
-				$tabOptions = array(
+				$tabOptions = [
 					'title'       => $this->getCustomTargetTitle( $key, $rootText ),
 					'messages'    => $this->getNamespace( $key, 'message' ),
 					'query'       => $this->getKeyQuery(
@@ -213,7 +213,7 @@ class NamespaceRelations {
 					'checkExists' => $userCanRead,
 					'weight'      => $this->getNamespace( $key, 'weight' ),
 					'isActive'    => false
-				);
+				];
 				if ( $title->equals( $tabOptions['title'] ) ) {
 					$tabOptions['isActive'] = true;
 				}
@@ -240,7 +240,7 @@ class NamespaceRelations {
 		}
 
 		$this->sortNavigation( $tabs ); // sort the tabs according to their weights
-		$navigation = array(); // rebuild the navigation
+		$navigation = []; // rebuild the navigation
 
 		// get Subject&Talk IDs
 		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs(
@@ -275,21 +275,21 @@ class NamespaceRelations {
 	 *
 	 * @return array
 	 */
-	private function makeSubjectTab( $subjectNS, $subjectTitle, $options = array() ) {
-		$defaultOptions = array(
-			'messages'    => array(),
+	private function makeSubjectTab( $subjectNS, $subjectTitle, $options = [] ) {
+		$defaultOptions = [
+			'messages'    => [],
 			'isActive'    => false,
 			'query'       => '',
 			'checkExists' => true,
 			'weight'      => self::SUBJECT_WEIGHT,
 			'context'     => 'subject'
-		);
+		];
 		$options = array_replace( $defaultOptions, $options );
 
 		// prepare messages
 		list( $subjectId ) = $this->getDefaultTabsIDs( $options['title'] );
 		$options['key'] = $subjectId;
-		$options['messages'] = array( 'nstab-' . $subjectId );
+		$options['messages'] = [ 'nstab-' . $subjectId ];
 		if ( $options['title']->isMainPage() ) {
 			array_unshift( $options['messages'], 'mainpage-nstab' );
 		}
@@ -306,22 +306,22 @@ class NamespaceRelations {
 	 *
 	 * @return array
 	 */
-	private function makeTalkTab( $talkNS, $talkTitle, $options = array() ) {
-		$defaultOptions = array(
-			'messages'    => array(),
+	private function makeTalkTab( $talkNS, $talkTitle, $options = [] ) {
+		$defaultOptions = [
+			'messages'    => [],
 			'isActive'    => false,
 			'query'       => '',
 			'checkExists' => true,
 			'weight'      => self::TALK_WEIGHT,
 			'context'     => 'talk'
-		);
+		];
 		$options = array_replace( $defaultOptions, $options );
 
 		list( , $talkId ) = $this->getDefaultTabsIDs( $options['title'] );
-		$options['messages'] = array(
+		$options['messages'] = [
 			'nstab-' . $talkId,
 			'talk'
-		);
+		];
 
 		return $this->makeTab( $talkNS, $talkTitle, $options );
 	}
@@ -335,14 +335,14 @@ class NamespaceRelations {
 	 *
 	 * @return array
 	 */
-	private function makeTab( $tabNS, $tabTitle, $options = array() ) {
-		$defaultOptions = array(
-			'messages'    => array(),
+	private function makeTab( $tabNS, $tabTitle, $options = [] ) {
+		$defaultOptions = [
+			'messages'    => [],
 			'isActive'    => false,
 			'query'       => '',
 			'checkExists' => true,
 			'weight'      => $this->generateWeight()
-		);
+		];
 		$options = array_replace( $defaultOptions, $options );
 
 		// get the title object
@@ -364,8 +364,8 @@ class NamespaceRelations {
 	 */
 	private function getCustomTargetTitle( $key, $title, $raw = false ) {
 		$customTarget = $this->getNamespace( $key, 'customTarget' );
-		if ( !is_null( $customTarget ) ) {
-			$title = wfMsgReplaceArgs( $customTarget, array( $title ) );
+		if ( $customTarget !== null ) {
+			$title = wfMsgReplaceArgs( $customTarget, [ $title ] );
 		}
 		if ( $raw ) {
 			return $title;
@@ -434,26 +434,26 @@ class NamespaceRelations {
 			$talkId = $subjectId . '_talk';
 		}
 
-		return array(
+		return [
 			$subjectId,
 			$talkId
-		);
+		];
 	}
 
 	/**
 	 * Returns full NS tab definition or one of its fields
 	 *
 	 * @param string $key NS tab key
-	 * @param string $param NS tab parameter
+	 * @param string|null $param NS tab parameter
 	 * @param mixed $default Value to return if parameter doesn't exist
 	 *
 	 * @return array|mixed
 	 */
 	private function getNamespace( $key, $param = null, $default = null ) {
-		if ( is_null( $param ) && isset( $this->namespaces[$key] ) ) {
+		if ( $param === null && isset( $this->namespaces[$key] ) ) {
 			return $this->namespaces[$key];
 		} elseif ( isset( $this->namespaces[$key][$param] )
-			&& !is_null( $this->namespaces[$key][$param] )
+			&& $this->namespaces[$key][$param] !== null
 		) {
 			return $this->namespaces[$key][$param];
 		} else {
@@ -465,15 +465,15 @@ class NamespaceRelations {
 	 * Sets full NS tab definition or one of its fields
 	 *
 	 * @param string $key NS tab key
-	 * @param string $param NS tab parameter
+	 * @param string|null $param NS tab parameter
 	 * @param mixed $value Value to set, defines the whole tab if param is null
 	 *
 	 * @return NamespaceRelations
 	 */
 	private function setNamespace( $key, $param = null, $value = null ) {
-		if ( is_null( $param ) && !is_null( $value ) ) {
+		if ( $param === null && $value !== null ) {
 			$this->namespaces[$key] = $value;
-		} elseif ( !is_null( $param ) && !is_null( $value ) ) {
+		} elseif ( $param !== null && $value !== null ) {
 			$this->namespaces[$key][$param] = $value;
 		}
 
@@ -483,7 +483,7 @@ class NamespaceRelations {
 	/**
 	 * Attaches tabs handling to a source namespace
 	 *
-	 * @param integer $ns Namespace ID
+	 * @param int $ns Namespace ID
 	 * @param string $key NS tab key
 	 *
 	 * @throws MWException Thrown if namespace doesn't exist
@@ -499,7 +499,7 @@ class NamespaceRelations {
 	/**
 	 * Attaches tabs handling to a target namespace
 	 *
-	 * @param integer $ns Namespace ID
+	 * @param int $ns Namespace ID
 	 * @param string $key NS tab key
 	 *
 	 * @throws MWException Thrown if namespace doesn't exist

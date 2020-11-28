@@ -16,8 +16,8 @@
 		]
 	},
 	"AutoloadClasses": {
-		"NamespaceRelations": "NamespaceRelations_body.php",
-		"NamespaceRelationsHooks": "NamespaceRelationsHooks.php"
+		"NamespaceRelations": "src/NamespaceRelations.php",
+		"NamespaceRelationsHooks": "src/NamespaceRelationsHooks.php"
 	},
 	"Hooks": {
 		"SkinTemplateNavigationUniversal": "NamespaceRelationsHooks::onSkinTemplateNavigationUniversal"
