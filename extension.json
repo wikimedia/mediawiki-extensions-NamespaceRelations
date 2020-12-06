@@ -20,7 +20,7 @@
 		"NamespaceRelationsHooks": "src/NamespaceRelationsHooks.php"
 	},
 	"Hooks": {
-		"SkinTemplateNavigationUniversal": "NamespaceRelationsHooks::onSkinTemplateNavigationUniversal"
+		"SkinTemplateNavigation::Universal": "NamespaceRelationsHooks::onSkinTemplateNavigationUniversal"
 	},
 	"config": {
 		"NamespaceRelations": {
