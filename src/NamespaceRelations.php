@@ -380,7 +380,7 @@ class NamespaceRelations {
 	 * @param array &$navigation
 	 */
 	private function sortNavigation( &$navigation ) {
-		uasort( $navigation, function ( $first, $second ) {
+		uasort( $navigation, static function ( $first, $second ) {
 			return $first['weight'] - $second['weight'];
 		} );
 	}
