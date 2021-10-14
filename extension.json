@@ -8,7 +8,7 @@
 	"descriptionmsg": "nsrels-desc",
 	"type": "other",
 	"requires": {
-		"MediaWiki": ">= 1.29.0"
+		"MediaWiki": ">= 1.34.0"
 	},
 	"MessagesDirs": {
 		"NamespaceRelations": [

@@ -85,14 +85,9 @@ class NamespaceRelations {
 		$rootText = $this->getRootTitle( $titleText, $subjectNS );
 		// the root title to link other tabs against
 
-		if ( class_exists( 'MediaWiki\Permissions\PermissionManager' ) ) {
-			// MW 1.33+
-			$userCanRead = MediaWikiServices::getInstance()
-				->getPermissionManager()
-				->quickUserCan( 'read', $skinTemplate->getUser(), $title );
-		} else {
-			$userCanRead = $title->quickUserCan( 'read', $skinTemplate->getUser() );
-		}
+		$userCanRead = MediaWikiServices::getInstance()
+			->getPermissionManager()
+			->quickUserCan( 'read', $skinTemplate->getUser(), $title );
 
 		/**
 		 * * key (subject, talk, or custom key)
@@ -120,17 +115,19 @@ class NamespaceRelations {
 				$subjectOptions
 			);
 
+			$namespaceInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
+
 			// make a Talk tab
 			$talkOptions['checkExists'] = $userCanRead;
 			$talkOptions['title'] = Title::makeTitle(
-				MWNamespace::getTalk( $subjectNS ),
+				$namespaceInfo->getTalk( $subjectNS ),
 				$rootText
 			);
 			if ( $title->equals( $talkOptions['title'] ) ) {
 				$talkOptions['isActive'] = true;
 			}
 			$tabs['talk'] = $this->makeTalkTab(
-				MWNamespace::getTalk( $subjectNS ),
+				$namespaceInfo->getTalk( $subjectNS ),
 				$rootText,
 				$talkOptions
 			);
@@ -189,14 +186,14 @@ class NamespaceRelations {
 			// make a Talk tab
 			$talkOptions['checkExists'] = $userCanRead;
 			$talkOptions['title'] = Title::makeTitle(
-				MWNamespace::getTalk( $subjectNS ),
+				$namespaceInfo->getTalk( $subjectNS ),
 				$rootText
 			);
 			if ( $title->equals( $talkOptions['title'] ) ) {
 				$talkOptions['isActive'] = true;
 			}
 			$tabs['talk'] = $this->makeTalkTab(
-				MWNamespace::getTalk( $subjectNS ),
+				$namespaceInfo->getTalk( $subjectNS ),
 				$rootText,
 				$talkOptions
 			);
@@ -489,7 +486,7 @@ class NamespaceRelations {
 	 * @throws MWException Thrown if namespace doesn't exist
 	 */
 	private function addToNamespace( $ns, $key ) {
-		if ( MWNamespace::exists( $ns ) ) {
+		if ( MediaWikiServices::getInstance()->getNamespaceInfo()->exists( $ns ) ) {
 			$this->namespacesToNamespace[$ns][] = $key;
 		} else {
 			throw new MWException( "Namespace doesn't exist." );
@@ -505,7 +502,7 @@ class NamespaceRelations {
 	 * @throws MWException Thrown if namespace doesn't exist
 	 */
 	private function addToTarget( $ns, $key ) {
-		if ( MWNamespace::exists( $ns ) ) {
+		if ( MediaWikiServices::getInstance()->getNamespaceInfo()->exists( $ns ) ) {
 			$this->namespacesToTarget[$ns] = $key;
 		} else {
 			throw new MWException( "Namespace doesn't exist." );
