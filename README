@@ -13,7 +13,7 @@ This extensions provides a way to define custom namespace tabs besides Subject a
 
 To enable this extension, please add the following line to your LocalSettings.php:
 
-	require_once( "$IP/extensions/NamespaceRelations/NamespaceRelations.php" );
+	wfLoadExtension( 'NamespaceRelations' );
 
 == External links ==
 If you have any concerns about this extension, please refer to it's documentation:
