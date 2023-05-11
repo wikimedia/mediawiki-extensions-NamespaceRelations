@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gomoko"
+			"Gomoko",
+			"Verdy p"
 		]
 	},
-	"nsrels-desc": "Permet de définir des onglets d'espace de noms supplémentaires"
+	"nsrels-desc": "Permet de définir des onglets pour des espaces de noms supplémentaires"
 }
