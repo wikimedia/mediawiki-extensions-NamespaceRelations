@@ -100,6 +100,8 @@ class NamespaceRelations {
 		 * ** string $context context
 		 */
 		$tabs = [];
+		
+		$namespaceInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
 
 		if ( array_key_exists( $subjectNS, $this->namespacesToNamespace ) ) {
 			// in Main/Talk NS
@@ -114,8 +116,6 @@ class NamespaceRelations {
 				$rootText,
 				$subjectOptions
 			);
-
-			$namespaceInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
 
 			// make a Talk tab
 			$talkOptions['checkExists'] = $userCanRead;
