@@ -240,7 +240,7 @@ class NamespaceRelations {
 		$navigation = []; // rebuild the navigation
 
 		// get Subject&Talk IDs
-		list( $subjectTabId, $talkTabId ) = $this->getDefaultTabsIDs(
+		[ $subjectTabId, $talkTabId ] = $this->getDefaultTabsIDs(
 			$tabs['subject']['title']
 		);
 		foreach ( $tabs as $key => $definition ) {
@@ -284,7 +284,7 @@ class NamespaceRelations {
 		$options = array_replace( $defaultOptions, $options );
 
 		// prepare messages
-		list( $subjectId ) = $this->getDefaultTabsIDs( $options['title'] );
+		[ $subjectId ] = $this->getDefaultTabsIDs( $options['title'] );
 		$options['key'] = $subjectId;
 		$options['messages'] = [ 'nstab-' . $subjectId ];
 		if ( $options['title']->isMainPage() ) {
@@ -314,7 +314,7 @@ class NamespaceRelations {
 		];
 		$options = array_replace( $defaultOptions, $options );
 
-		list( , $talkId ) = $this->getDefaultTabsIDs( $options['title'] );
+		[ , $talkId ] = $this->getDefaultTabsIDs( $options['title'] );
 		$options['messages'] = [
 			'nstab-' . $talkId,
 			'talk'
